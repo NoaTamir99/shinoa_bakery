@@ -269,7 +269,7 @@
         </div>
     </div>
     <script>
-        const cart = [];
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         function addToCart(item, price) {
             const cartItem = cart.find(i => i.name === item);
@@ -279,6 +279,7 @@
                 cart.push({ name: item, price: price, quantity: 1 });
             }
             updateCartDisplay();
+            saveCart();
         }
 
         function removeFromCart(item) {
@@ -291,6 +292,7 @@
                 }
             }
             updateCartDisplay();
+            saveCart();
         }
 
         function updateCartDisplay() {
@@ -307,9 +309,18 @@
             document.getElementById('cart-items').style.display = cart.length > 0 ? 'block' : 'none';
         }
 
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
         document.getElementById('cart-button').addEventListener('click', function() {
             const cartItems = document.getElementById('cart-items');
             cartItems.style.display = cartItems.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // עדכון התצוגה בעת טעינת הדף
+        window.addEventListener('load', function() {
+            updateCartDisplay();
         });
     </script>
 </body>
