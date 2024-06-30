@@ -1,0 +1,19 @@
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.item-name, .price, .cart-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.cart-buttons button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}

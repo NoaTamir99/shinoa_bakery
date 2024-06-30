@@ -1,327 +1,188 @@
-<!DOCTYPE html>
-<!-- Website template by freewebsitetemplates.com -->
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Menu - The Bread Factory Website Template</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
-    <!-- קישור לספריית Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        .shopping-cart {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-        }
-        #cart-button {
-            font-size: 26px;
-            padding: 10px 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: white;
-        }
-        #cart-items {
-            font-size: 20px;
-            color: #ffffff;
-        }
-        #cart-list li {
-            color: #ffcc00;
-        }
-        table {
-            width: 100%;
-        }
-        table td {
-            padding: 5px;
-            text-align: center;
-        }
-        .cart-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-        }
-        .cart-buttons button {
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
-        }
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        .price {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .total-summary {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="shopping-cart">
-        <button id="cart-button"><i class="fa fa-shopping-cart"></i></button>
-        <div id="cart-items" style="display: none;">
-            <ul id="cart-list"></ul>
-            <div class="total-summary">סה"כ: $<span id="total-sum">0.00</span></div>
-            <a href="{{ url_for('checkout') }}" id="checkout-button" class="checkout-button">לתשלום</a>
-        </div>
-    </div>
-    <div class="header">
-        <div>
-            <a href="{{ url_for('index') }}" id="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo"></a>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('blog') }}">Blog</a></li>
-                <li class="selected"><a href="{{ url_for('menu') }}">Menu</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="content">
-        <div>
-            <ul>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/traditional.jpg') }}" alt=""></a>
-                    <a href="#">Traditional</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>Dolor Sitau</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Dolor Sitau', 10.00)">+</button>
-                                <button onclick="removeFromCart('Dolor Sitau')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Amet Consecte</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Amet Consecte', 10.00)">+</button>
-                                <button onclick="removeFromCart('Amet Consecte')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Edipiscing Elit</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Edipiscing Elit', 10.00)">+</button>
-                                <button onclick="removeFromCart('Edipiscing Elit')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/collection.jpg') }}" alt=""></a>
-                    <a href="#">Collection</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>Morbi Augue</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Morbi Augue', 10.00)">+</button>
-                                <button onclick="removeFromCart('Morbi Augue')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Vitae Tincidunt</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Vitae Tincidunt', 10.00)">+</button>
-                                <button onclick="removeFromCart('Vitae Tincidunt')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Integer Congue</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Integer Congue', 10.00)">+</button>
-                                <button onclick="removeFromCart('Integer Congue')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/favorites.jpg') }}" alt=""></a>
-                    <a href="#">Favorites</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>Quam laculis</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Quam laculis', 10.00)">+</button>
-                                <button onclick="removeFromCart('Quam laculis')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Accumsan laculis</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Accumsan laculis', 10.00)">+</button>
-                                <button onclick="removeFromCart('Accumsan laculis')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Quisque Tempus</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Quisque Tempus', 10.00)">+</button>
-                                <button onclick="removeFromCart('Quisque Tempus')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-            </ul>
-            <ul>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/loafs.jpg') }}" alt=""></a>
-                    <a href="#">Loafs</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>Integer Raisins</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Integer Raisins', 10.00)">+</button>
-                                <button onclick="removeFromCart('Integer Raisins')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Nulla Placerat</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Nulla Placerat', 10.00)">+</button>
-                                <button onclick="removeFromCart('Nulla Placerat')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Ultrices Luctus</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Ultrices Luctus', 10.00)">+</button>
-                                <button onclick="removeFromCart('Ultrices Luctus')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/sandwiches.jpg') }}" alt=""></a>
-                    <a href="#">Sandwiches</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>New Yorker</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('New Yorker', 10.00)">+</button>
-                                <button onclick="removeFromCart('New Yorker')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Monte Cristo</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Monte Cristo', 10.00)">+</button>
-                                <button onclick="removeFromCart('Monte Cristo')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Ceasar Bun</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Ceasar Bun', 10.00)">+</button>
-                                <button onclick="removeFromCart('Ceasar Bun')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-                <li>
-                    <a href="#"><img src="{{ url_for('static', filename='images/croissants.jpg') }}" alt=""></a>
-                    <a href="#">Croissants</a>
-                    <table>
-                        <tr class="menu-item">
-                            <td>Pellentesque</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Pellentesque', 10.00)">+</button>
-                                <button onclick="removeFromCart('Pellentesque')">-</button>
-                            </td>
-                        </tr>
-                        <tr class="menu-item">
-                            <td>Quis Egestas</td>
-                            <td class="price">$ 10.00</td>
-                            <td class="cart-buttons">
-                                <button onclick="addToCart('Quis Egestas', 10.00)">+</button>
-                                <button onclick="removeFromCart('Quis Egestas')">-</button>
-                            </td>
-                        </tr>
-                    </table>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer">
-        <div>
-            <p>copyright &#169; footer | all rights reserved.</p>
-        </div>
-    </div>
-    <script>
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+{% extends 'base.html' %}
 
-        function addToCart(item, price) {
-            const cartItem = cart.find(i => i.name === item);
-            if (cartItem) {
-                cartItem.quantity++;
-            } else {
-                cart.push({ name: item, price: price, quantity: 1 });
-            }
-            updateCartDisplay();
-            saveCart();
-        }
+{% block title %}Menu - The Bread Factory{% endblock %}
 
-        function removeFromCart(item) {
-            const cartItem = cart.find(i => i.name === item);
-            if (cartItem) {
-                cartItem.quantity--;
-                if (cartItem.quantity <= 0) {
-                    const index = cart.indexOf(cartItem);
-                    cart.splice(index, 1);
-                }
-            }
-            updateCartDisplay();
-            saveCart();
-        }
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+{% endblock %}
 
-        function updateCartDisplay() {
-            const cartList = document.getElementById('cart-list');
-            cartList.innerHTML = '';
-            let totalSum = 0;
-            cart.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = `${item.name} - ${item.quantity} x $${item.price.toFixed(2)}`;
-                cartList.appendChild(li);
-                totalSum += item.price * item.quantity;
-            });
-            document.getElementById('total-sum').textContent = totalSum.toFixed(2);
-            document.getElementById('cart-items').style.display = cart.length > 0 ? 'block' : 'none';
-        }
-
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        document.getElementById('cart-button').addEventListener('click', function() {
-            const cartItems = document.getElementById('cart-items');
-            cartItems.style.display = cartItems.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // עדכון התצוגה בעת טעינת הדף
-        window.addEventListener('load', function() {
-            updateCartDisplay();
-        });
-    </script>
-</body>
-</html>
+{% block content %}
+<div>
+    <ul>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/traditional.jpg') }}" alt=""></a>
+            <a href="#">Traditional</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">Dolor Sitau</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Dolor Sitau', 10.00)">+</button>
+                        <button onclick="removeFromCart('Dolor Sitau')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Amet Consecte</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Amet Consecte', 10.00)">+</button>
+                        <button onclick="removeFromCart('Amet Consecte')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Edipiscing Elit</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Edipiscing Elit', 10.00)">+</button>
+                        <button onclick="removeFromCart('Edipiscing Elit')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/collection.jpg') }}" alt=""></a>
+            <a href="#">Collection</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">Morbi Augue</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Morbi Augue', 10.00)">+</button>
+                        <button onclick="removeFromCart('Morbi Augue')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Vitae Tincidunt</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Vitae Tincidunt', 10.00)">+</button>
+                        <button onclick="removeFromCart('Vitae Tincidunt')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Integer Congue</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Integer Congue', 10.00)">+</button>
+                        <button onclick="removeFromCart('Integer Congue')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/favorites.jpg') }}" alt=""></a>
+            <a href="#">Favorites</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">Quam laculis</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Quam laculis', 10.00)">+</button>
+                        <button onclick="removeFromCart('Quam laculis')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Accumsan laculis</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Accumsan laculis', 10.00)">+</button>
+                        <button onclick="removeFromCart('Accumsan laculis')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Quisque Tempus</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Quisque Tempus', 10.00)">+</button>
+                        <button onclick="removeFromCart('Quisque Tempus')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ul>
+    <ul>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/loafs.jpg') }}" alt=""></a>
+            <a href="#">Loafs</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">Integer Raisins</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Integer Raisins', 10.00)">+</button>
+                        <button onclick="removeFromCart('Integer Raisins')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Nulla Placerat</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Nulla Placerat', 10.00)">+</button>
+                        <button onclick="removeFromCart('Nulla Placerat')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Ultrices Luctus</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Ultrices Luctus', 10.00)">+</button>
+                        <button onclick="removeFromCart('Ultrices Luctus')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/sandwiches.jpg') }}" alt=""></a>
+            <a href="#">Sandwiches</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">New Yorker</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('New Yorker', 10.00)">+</button>
+                        <button onclick="removeFromCart('New Yorker')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Monte Cristo</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Monte Cristo', 10.00)">+</button>
+                        <button onclick="removeFromCart('Monte Cristo')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Ceasar Bun</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Ceasar Bun', 10.00)">+</button>
+                        <button onclick="removeFromCart('Ceasar Bun')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <a href="#"><img src="{{ url_for('static', filename='images/croissants.jpg') }}" alt=""></a>
+            <a href="#">Croissants</a>
+            <table>
+                <tr class="menu-item">
+                    <td class="item-name">Pellentesque</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Pellentesque', 10.00)">+</button>
+                        <button onclick="removeFromCart('Pellentesque')">-</button>
+                    </td>
+                </tr>
+                <tr class="menu-item">
+                    <td class="item-name">Quis Egestas</td>
+                    <td class="price">$ 10.00</td>
+                    <td class="cart-buttons">
+                        <button onclick="addToCart('Quis Egestas', 10.00)">+</button>
+                        <button onclick="removeFromCart('Quis Egestas')">-</button>
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ul>
+</div>
+{% endblock %}
