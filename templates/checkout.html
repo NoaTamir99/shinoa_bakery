@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .checkout-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-form">
+        <h2>Payment Details</h2>
+        <form action="/process_payment" method="POST">
+            <div class="form-group">
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" name="full-name" maxlength="50" required>
+            </div>
+            <div class="form-group">
+                <label for="card-number">Card Number:</label>
+                <input type="text" id="card-number" name="card-number" maxlength="16" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">Expiry (MM/YY):</label>
+                <input type="text" id="expiry-date" name="expiry-date" maxlength="5" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" maxlength="3" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Pay Now</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('expiry-date').addEventListener('input', function(e) {
+            let value = e.target.value;
+            if (value.length === 2 && !value.includes('/')) {
+                e.target.value = value + '/';
+            }
+        });
+    </script>
+</body>
+</html>

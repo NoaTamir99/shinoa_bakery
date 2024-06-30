@@ -68,7 +68,7 @@
         <div id="cart-items" style="display: none;">
             <ul id="cart-list"></ul>
             <div class="total-summary">סה"כ: $<span id="total-sum">0.00</span></div>
-            <button id="checkout-button">לתשלום</button>
+            <a href="{{ url_for('checkout') }}" id="checkout-button" class="checkout-button">לתשלום</a>
         </div>
     </div>
     <div class="header">
