@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+ביקורות
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div>
+        <h1>השאר ביקורת</h1>
+        <form action="{{ url_for('review') }}" method="POST" enctype="multipart/form-data" class="review-form">
+            <div class="form-group">
+                <label for="username">שם משתמש:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="review">ביקורת:</label>
+                <textarea id="review" name="review" rows="4" cols="25" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">העלה תמונה:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            
+            <input type="submit" value="שלח" class="submit-button">
+        </form>
+        
+        <h2>ביקורות קיימות</h2>
+        <ul class="reviews-list">
+            {% for review in reviews %}
+                <li class="review-item">
+                    <p><strong>{{ review.username }}</strong>: {{ review.text }}</p>
+                    {% if review.image_url %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" alt="תמונה">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

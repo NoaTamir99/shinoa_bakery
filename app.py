@@ -1,6 +1,25 @@
 from flask import Flask, render_template, url_for, request, redirect
+import sqlite3
+import os
 
 app = Flask(__name__)
+
+@app.route('/add_pizza', methods=['GET', 'POST'])
+def add_pizza():
+    dish_name = 'pizza'
+    price = 8    
+    with get_db_connection() as con:
+        cur = con.cursor()
+        cur.execute("INSERT INTO dishes (name, price) VALUES (?, ?)", 
+                    (dish_name, price))
+        con.commit()
+        
+    return render_template('index.html')
+
+def get_db_connection():
+    conn = sqlite3.connect('sqlite.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/')
 def index():
@@ -10,9 +29,9 @@ def index():
 def about():
     return render_template('about.html')
 
-@app.route('/blog')
-def blog():
-    return render_template('blog.html')
+@app.route('/review')
+def review():
+    return render_template('review.html')
 
 @app.route('/menu')
 def menu():

@@ -3,6 +3,7 @@
 body{
 	margin:0;
 	background:url(../images/bg-body.jpg);
+	
 }
 /*------------------------- Header ------------------------*/
 .header{
@@ -447,4 +448,71 @@ body{
 
 .checkout-button:hover {
     background-color: #0056b3;
+}
+.review-form {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.review-form .form-group {
+    margin-bottom: 15px;
+	max-width: 500px;
+}
+
+.review-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.review-form input[type="text"],
+.review-form textarea,
+.review-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.review-form .submit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+.review-form .submit-button:hover {
+    background-color: #0056b3;
+}
+
+.reviews-list {
+    list-style: none;
+    padding: 0;
+}
+
+.reviews-list .review-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.reviews-list .review-item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
 }
