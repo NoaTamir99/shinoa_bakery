@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="checkout-form">
+    <h2>Payment Details</h2>
+    <form action="/process_payment" method="POST">
+        <div class="form-group">
+            <label for="full-name">Full Name:</label>
+            <input type="text" id="full-name" name="full-name" maxlength="50" required>
+        </div>
+        <div class="form-group">
+            <label for="card-number">Card Number:</label>
+            <input type="text" id="card-number" name="card-number" maxlength="16" required>
+        </div>
+        <div class="form-group">
+            <label for="expiry-date">Expiry (MM/YY):</label>
+            <input type="text" id="expiry-date" name="expiry-date" maxlength="5" required>
+        </div>
+        <div class="form-group">
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" name="cvv" maxlength="3" required>
+        </div>
+        <div class="form-group">
+            <button type="submit">Pay Now</button>
+        </div>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
+{% endblock %}

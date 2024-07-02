@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}The Bread Factory{% endblock %}
+
+{% block content %}
+<div>
+    <ul>
+        <li>
+            <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='images/bread.jpg') }}" alt=""></a>
+            <a href="{{ url_for('menu') }}">bread</a>
+        </li>
+        
+       
+   
+        <li>
+            <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='images/sandwiches.jpg') }}" alt=""></a>
+            <a href="{{ url_for('menu') }}">Sandwiches</a>
+        </li>
+        <li>
+            <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='images/croissants.jpg') }}" alt=""></a>
+            <a href="{{ url_for('menu') }}">Croissants</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
