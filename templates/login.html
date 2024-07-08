@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+    <form method="post" action="{{ url_for('login') }}">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <label for="role">Role:</label><br>
+        <select id="role" name="role">
+            <option value="customer">Customer</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+        </select><br><br>
+        <input type="submit" value="Login">
+    </form>
+    <a href="{{ url_for('register') }}">Register</a>
+{% endblock %}
