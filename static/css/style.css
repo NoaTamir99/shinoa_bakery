@@ -449,6 +449,7 @@ body{
 .checkout-button:hover {
     background-color: #0056b3;
 }
+/* סגנונות קיימים */
 .review-form {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -461,7 +462,7 @@ body{
 
 .review-form .form-group {
     margin-bottom: 15px;
-	max-width: 500px;
+    max-width: 500px;
 }
 
 .review-form label {
@@ -502,12 +503,13 @@ body{
 }
 
 .reviews-list .review-item {
-    background-color: #fff;
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    color: #333;
 }
 
 .reviews-list .review-item img {
@@ -515,6 +517,16 @@ body{
     height: auto;
     display: block;
     margin-top: 10px;
+}
+
+.reviews-list .review-item p {
+    color: #333;
+}
+
+/* סגנונות לכותרות */
+h1, h2 {
+    text-align: center;
+
 }
 /* עיצוב לכפתור מחיקה */
 .delete-button {

@@ -21,7 +21,7 @@
                     <td class="cart-buttons">
                         <button onclick="addToCart('{{ dish['name'] }}', {{ dish['price'] }})">+</button>
                         <button onclick="removeFromCart('{{ dish['name'] }}')">-</button>
-                        <form action="{{ url_for('remove_dish') }}" method="POST" style="display:inline;">
+                        <form action="{{ url_for('delete_dish') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="name" value="{{ dish['name'] }}">
                             <button type="submit" class="delete-button"><i class="fa fa-trash"></i></button>
                         </form>

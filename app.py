@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'
 
 def get_db_connection():
     conn = sqlite3.connect('sqlite.db')
@@ -14,6 +16,7 @@ def get_db_connection():
 def setup_database():
     with get_db_connection() as con:
         cur = con.cursor()
+        # יצירת טבלת משתמשים אם היא לא קיימת
         cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,6 +25,15 @@ def setup_database():
             role TEXT NOT NULL CHECK(role IN ('customer', 'admin', 'manager'))
         )
         """)
+        # יצירת טבלת ביקורות אם היא לא קיימת
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL,
+                text TEXT NOT NULL,
+                image_url TEXT
+            )
+        ''')
         con.commit()
 
 @app.route('/')
@@ -32,9 +44,32 @@ def index():
 def about():
     return render_template('about.html')
 
-@app.route('/review')
+@app.route('/review', methods=['GET', 'POST'])
 def review():
-    return render_template('review.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        text = request.form['review']
+        image = request.files['image']
+        image_url = None
+
+        if image:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_url = filename
+
+        with get_db_connection() as con:
+            cur = con.cursor()
+            cur.execute('INSERT INTO reviews (username, text, image_url) VALUES (?, ?, ?)', (username, text, image_url))
+            con.commit()
+
+        return redirect(url_for('review'))
+
+    with get_db_connection() as con:
+        cur = con.cursor()
+        cur.execute('SELECT * FROM reviews')
+        reviews = cur.fetchall()
+
+    return render_template('review.html', reviews=reviews)
 
 @app.route('/menu')
 def menu():
@@ -67,13 +102,12 @@ def add_dish():
     category = request.form['category']
     with get_db_connection() as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO dishes (name, price, category) VALUES (?, ?, ?)",
-                    (name, price, category))
+        cur.execute("INSERT INTO dishes (name, price, category) VALUES (?, ?, ?)", (name, price, category))
         con.commit()
     return redirect(url_for('menu'))
 
-@app.route('/remove_dish', methods=['POST'])
-def remove_dish():
+@app.route('/delete_dish', methods=['POST'])
+def delete_dish():
     name = request.form['name']
     with get_db_connection() as con:
         cur = con.cursor()
@@ -115,8 +149,7 @@ def register():
         
         with get_db_connection() as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-                        (username, hashed_password, role))
+            cur.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, hashed_password, role))
             con.commit()
         
         flash('Registration successful. Please login.')
