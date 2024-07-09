@@ -33,7 +33,7 @@
                 <li class="review-item">
                     <p><strong>{{ review.username }}</strong>: {{ review.text }}</p>
                     {% if review.image_url %}
-                        <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" alt="תמונה">
+                        <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" alt="תמונה" class="fixed-size">
                     {% endif %}
                 </li>
             {% endfor %}

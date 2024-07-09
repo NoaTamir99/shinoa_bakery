@@ -522,6 +522,12 @@ body{
 .reviews-list .review-item p {
     color: #333;
 }
+/* הוסיפו את זה לקובץ ה-CSS שלכם */
+img.fixed-size {
+    width: 100px; /* הגדרה לרוחב קבוע */
+    height: auto; /* שמירת היחס המקורי של התמונה */
+}
+
 
 /* סגנונות לכותרות */
 h1, h2 {
