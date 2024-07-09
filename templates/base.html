@@ -6,25 +6,34 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block head %}{% endblock %}
 </head>
 <body>
+    <div class="base-top-bar">
+        <div class="auth-links">
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            {% include 'cart.html' %}
+        </div>
+    </div>
     {% include 'cart.html' %}
     <div class="header">
         <div>
             <a href="{{ url_for('index') }}" id="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo"></a>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('menu') }}">Menu</a></li>
-                <li><a href="{{ url_for('review') }}">Review</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                <li><a href="{{ url_for('manager') }}">Manager</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
-            </ul>
         </div>
+    </div>
+    <div class="base-nav-bar">
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('menu') }}">Menu</a></li>
+            <li><a href="{{ url_for('review') }}">Review</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('manager') }}">Manager</a></li>
+            <li><a href="{{ url_for('orders_management') }}">Orders Management</a></li>
+        </ul>
     </div>
     <div class="content">
         {% block content %}{% endblock %}

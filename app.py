@@ -64,17 +64,25 @@ def review():
         image = request.files['image']
         image_url = None
 
-        if image:
-            filename = secure_filename(image.filename)
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            image_url = filename
-
         with get_db_connection() as con:
             cur = con.cursor()
+            cur.execute('SELECT 1 FROM users WHERE username = ?', (username,))
+            user_exists = cur.fetchone()
+
+            if not user_exists:
+                flash('Username does not exist. Please register before leaving a review.')
+                return redirect(url_for('review'))
+
+            if image:
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                image_url = filename
+
             cur.execute('INSERT INTO reviews (username, text, image_url) VALUES (?, ?, ?)', (username, text, image_url))
             con.commit()
 
         return redirect(url_for('review'))
+
 
     with get_db_connection() as con:
         cur = con.cursor()
@@ -82,6 +90,14 @@ def review():
         reviews = cur.fetchall()
 
     return render_template('review.html', reviews=reviews)
+
+@app.route('/orders_management')
+def orders_management():
+    with get_db_connection() as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM orders")
+        orders = cur.fetchall()
+    return render_template('orders.html', orders=orders)
 
 @app.route('/menu')
 def menu():
