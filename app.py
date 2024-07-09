@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 import sqlite3
 import os
+import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -16,16 +17,15 @@ def get_db_connection():
 def setup_database():
     with get_db_connection() as con:
         cur = con.cursor()
-        # יצירת טבלת משתמשים אם היא לא קיימת
         cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL,
             password TEXT NOT NULL,
-            role TEXT NOT NULL CHECK(role IN ('customer', 'admin', 'manager'))
+            role TEXT NOT NULL CHECK(role IN ('customer', 'admin', 'manager')),
+            cart TEXT
         )
         """)
-        # יצירת טבלת ביקורות אם היא לא קיימת
         cur.execute('''
             CREATE TABLE IF NOT EXISTS reviews (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,6 +34,18 @@ def setup_database():
                 image_url TEXT
             )
         ''')
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS dishes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                price REAL NOT NULL,
+                category TEXT NOT NULL
+            )
+        ''')
+        cur.execute("PRAGMA table_info(users)")
+        columns = [column[1] for column in cur.fetchall()]
+        if 'cart' not in columns:
+            cur.execute("ALTER TABLE users ADD COLUMN cart TEXT")
         con.commit()
 
 @app.route('/')
@@ -149,7 +161,7 @@ def register():
         
         with get_db_connection() as con:
             cur = con.cursor()
-            cur.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, hashed_password, role))
+            cur.execute("INSERT INTO users (username, password, role, cart) VALUES (?, ?, ?, ?)", (username, hashed_password, role, json.dumps([])))
             con.commit()
         
         flash('Registration successful. Please login.')
@@ -161,6 +173,23 @@ def register():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    with get_db_connection() as con:
+        cur = con.cursor()
+        if request.method == 'POST':
+            cart = request.json.get('cart')
+            cur.execute('UPDATE users SET cart = ? WHERE id = ?', (json.dumps(cart), user_id))
+            con.commit()
+            return jsonify({'message': 'Cart updated successfully'})
+        else:
+            cur.execute('SELECT cart FROM users WHERE id = ?', (user_id,))
+            user_cart = cur.fetchone()['cart']
+            return jsonify(json.loads(user_cart) if user_cart else [])
 
 if __name__ == '__main__':
     setup_database()
