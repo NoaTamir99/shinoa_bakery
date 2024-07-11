@@ -4,14 +4,36 @@
 
 {% block content %}
 <div>
+    <!-- Flash message container -->
+    <div id="flash-messages">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- JavaScript to display popup and redirect -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            if (flashMessages.length > 0) {
+                flashMessages.forEach(message => {
+                    alert(message.textContent);
+                });
+                // Redirect to the homepage after displaying the messages
+                window.location.href = "{{ url_for('index') }}";
+            }
+        });
+    </script>
+
     <ul>
         <li>
             <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='images/bread.jpg') }}" alt=""></a>
             <a href="{{ url_for('menu') }}">bread</a>
         </li>
-        
-       
-   
         <li>
             <a href="{{ url_for('menu') }}"><img src="{{ url_for('static', filename='images/sandwiches.jpg') }}" alt=""></a>
             <a href="{{ url_for('menu') }}">Sandwiches</a>

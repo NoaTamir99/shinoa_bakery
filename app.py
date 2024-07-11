@@ -191,7 +191,7 @@ def process_payment():
     cur.execute('UPDATE users SET cart = ? WHERE id = ?', (json.dumps([]), user_id))
     con.commit()
     
-    return jsonify({'message': 'Payment successful!'})
+    return redirect(url_for('index'))
 
 @app.route('/order_confirmation')
 def order_confirmation():
