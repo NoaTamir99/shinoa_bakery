@@ -1,33 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}Payment{% endblock %}
+{% block title %}Contact{% endblock %}
 
 {% block content %}
-<div class="checkout-form">
-    <h2>Payment Details</h2>
-    <form id="payment-form">
-        <div class="form-group">
-            <label for="full-name">Full Name:</label>
-            <input type="text" id="full-name" name="full-name" maxlength="50" required>
-        </div>
-        <div class="form-group">
-            <label for="card-number">Card Number:</label>
-            <input type="text" id="card-number" name="card-number" maxlength="16" required>
-        </div>
-        <div class="form-group">
-            <label for="expiry-date">Expiry (MM/YY):</label>
-            <input type="text" id="expiry-date" name="expiry-date" maxlength="5" required>
-        </div>
-        <div class="form-group">
-            <label for="cvv">CVV:</label>
-            <input type="text" id="cvv" name="cvv" maxlength="3" required>
-        </div>
-        <div class="form-group">
-            <button type="submit">Pay Now</button>
-        </div>
-    </form>
-    <div id="payment-message"></div>
+<div class="contact">
+    <p>This website template has been designed by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> for you, for free. You can replace all this text with your own text. You can remove any link to our website from this website template, you're free to use this website template without linking back to us. If you're having problems editing this website template, then don't hesitate to ask for help on the <a href="http://www.freewebsitetemplates.com/forum/">Forum</a>.</p>
+    <p class="address">Address : 101 Nam tincidunt eros vel odio adipiscing, 0101 <br>
+    Office Phone Number : (101) 123-4567 <br>
+    Fax Number : 1-074-328-598 <br>
+    Email : info@companyname.com <br>
+    You can call our hotline: 1800-wedding</p>
+    <div class="connect">
+        <span>Share Us</span>
+        <a href="http://twitter.com/fwtemplates" id="content-twitter">twitter</a>
+        <a href="http://facebook.com/freewebsitetemplates" id="content-facebook">facebook</a>
+    </div>
 </div>
-<script src="{{ url_for('static', filename='js/checkout.js') }}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
 {% endblock %}

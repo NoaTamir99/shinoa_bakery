@@ -524,7 +524,7 @@ body {
 
 /* סגנונות עבור תצוגת מנהל */
 .reviews-list .review-item img.manager-view {
-    width: 200px; /* ניתן לשנות את הרוחב לפי הצורך */
+    width: 100px; /* ניתן לשנות את הרוחב לפי הצורך */
     height: auto;
     border: 1px solid #ccc;
     border-radius: 5px;
