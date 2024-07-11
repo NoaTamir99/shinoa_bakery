@@ -1,13 +1,35 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import sqlite3
 import os
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+import functools
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class User(UserMixin):
+    def __init__(self, id, username, role):
+        self.id = id
+        self.username = username
+        self.role = role
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = sqlite3.connect('sqlite.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = cursor.fetchone()
+    if user:
+        return User(id=user[0], username=user[1], role=user[3])
+    return None
 
 def get_db_connection():
     conn = sqlite3.connect('sqlite.db')
@@ -26,6 +48,15 @@ def setup_database():
             cart TEXT
         )
         """)
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            items TEXT NOT NULL,
+            total_amount REAL NOT NULL,
+            status TEXT NOT NULL
+        )
+        """)
         cur.execute('''
             CREATE TABLE IF NOT EXISTS reviews (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,17 +67,23 @@ def setup_database():
         ''')
         cur.execute('''
             CREATE TABLE IF NOT EXISTS dishes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                price REAL NOT NULL,
+                price INTEGER NOT NULL,
                 category TEXT NOT NULL
             )
         ''')
-        cur.execute("PRAGMA table_info(users)")
-        columns = [column[1] for column in cur.fetchall()]
-        if 'cart' not in columns:
-            cur.execute("ALTER TABLE users ADD COLUMN cart TEXT")
         con.commit()
+
+def role_required(role):
+    def wrapper(fn):
+        @functools.wraps(fn)
+        @login_required
+        def decorated_view(*args, **kwargs):
+            if current_user.role != role:
+                return 'Unauthorized', 401
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
 
 @app.route('/')
 def index():
@@ -57,8 +94,9 @@ def about():
     return render_template('about.html')
 
 @app.route('/review', methods=['GET', 'POST'])
+@login_required
 def review():
-    if request.method == 'POST':
+    if request.method == 'POST' and current_user.role != 'manager':
         username = request.form['username']
         text = request.form['review']
         image = request.files['image']
@@ -83,7 +121,6 @@ def review():
 
         return redirect(url_for('review'))
 
-
     with get_db_connection() as con:
         cur = con.cursor()
         cur.execute('SELECT * FROM reviews')
@@ -91,7 +128,8 @@ def review():
 
     return render_template('review.html', reviews=reviews)
 
-@app.route('/orders_management')
+@app.route('/orders_management', endpoint='orders_management')
+@role_required('admin')
 def orders_management():
     with get_db_connection() as con:
         cur = con.cursor()
@@ -99,7 +137,17 @@ def orders_management():
         orders = cur.fetchall()
     return render_template('orders.html', orders=orders)
 
+@app.route('/close_order/<int:order_id>', methods=['POST'], endpoint='close_order')
+@role_required('admin')
+def close_order(order_id):
+    with get_db_connection() as con:
+        cur = con.cursor()
+        cur.execute('DELETE FROM orders WHERE id = ?', (order_id,))
+        con.commit()
+    return redirect(url_for('orders_management'))
+
 @app.route('/menu')
+@login_required
 def menu():
     with get_db_connection() as con:
         cur = con.cursor()
@@ -112,18 +160,50 @@ def contact():
     return render_template('contact.html')
 
 @app.route('/checkout')
+@login_required
 def checkout():
     return render_template('checkout.html')
 
 @app.route('/process_payment', methods=['POST'])
+@login_required
 def process_payment():
-    return redirect(url_for('index'))
+    if current_user.role != 'customer':
+        return 'Unauthorized', 403
+    
+    # Retrieve cart details
+    user_id = current_user.id
+    with get_db_connection() as con:
+        cur = con.cursor()
+        cur.execute('SELECT cart FROM users WHERE id = ?', (user_id,))
+        user_cart = cur.fetchone()['cart']
+        cart = json.loads(user_cart) if user_cart else []
+    
+    # Calculate total amount
+    total_amount = sum(item['price'] * item['quantity'] for item in cart)
+    
+    # Save order details to the database
+    customer_name = current_user.username
+    items = json.dumps(cart)
+    cur.execute('INSERT INTO orders (customer_name, items, total_amount, status) VALUES (?, ?, ?, ?)',
+                (customer_name, items, total_amount, 'open'))
+    
+    # Clear the cart
+    cur.execute('UPDATE users SET cart = ? WHERE id = ?', (json.dumps([]), user_id))
+    con.commit()
+    
+    return jsonify({'message': 'Payment successful!'})
+
+@app.route('/order_confirmation')
+def order_confirmation():
+    return 'Order confirmed!'
 
 @app.route('/manager')
+@role_required('manager')
 def manager():
     return render_template('manager.html')
 
 @app.route('/add_dish', methods=['POST'])
+@role_required('manager')
 def add_dish():
     name = request.form['name']
     price = request.form['price']
@@ -135,6 +215,7 @@ def add_dish():
     return redirect(url_for('menu'))
 
 @app.route('/delete_dish', methods=['POST'])
+@role_required('manager')
 def delete_dish():
     name = request.form['name']
     with get_db_connection() as con:
@@ -156,9 +237,8 @@ def login():
             user = cur.fetchone()
             
             if user and check_password_hash(user['password'], password):
-                session['user_id'] = user['id']
-                session['username'] = user['username']
-                session['role'] = user['role']
+                user_obj = User(id=user['id'], username=user['username'], role=user['role'])
+                login_user(user_obj)
                 return redirect(url_for('index'))
             else:
                 flash('Invalid username or password')
@@ -186,15 +266,15 @@ def register():
     return render_template('register.html')
 
 @app.route('/logout')
+@login_required
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for('index'))
 
 @app.route('/cart', methods=['GET', 'POST'])
+@login_required
 def cart():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    user_id = session['user_id']
+    user_id = current_user.id
     with get_db_connection() as con:
         cur = con.cursor()
         if request.method == 'POST':

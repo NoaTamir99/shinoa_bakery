@@ -3,14 +3,13 @@
 {% block title %}About - The Bread Factory{% endblock %}
 
 {% block content %}
-<div>
-    <h3>We Have Free Templates for Everyone</h3>
-    <p>Our website templates are created with inspiration, checked for quality and originality and meticulously sliced and coded. What's more, they're absolutely free! You can do a lot with them. You can modify them. You can use them to design websites for clients, so long as you agree with the <a href="http://www.freewebsitetemplates.com/about/termsofuse/">Terms of Use</a>. You can even remove all our links if you want to.</p>
-    <h3>We Have More Templates for You</h3>
-    <p>Looking for more templates? Just browse through all our <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a> and find what you're looking for. But if you don't find any website template you can use, you can try our <a href="http://www.freewebsitetemplates.com/freewebdesign/">Free Web Design</a> service and tell us all about it. Maybe you're looking for something different, something special. And we love the challenge of doing something different and something special.</p>
-    <h3>Be Part of Our Community</h3>
-    <p>If you're experiencing issues and concerns about this website template, join the discussion <a href="http://www.freewebsitetemplates.com/forum/">on our forum</a> and meet other people in the community who share the same interests with you.</p>
-    <h3>Template details</h3>
-    <p class="lastchild">Design version 7<br>Code version 3<br>Website Template details, discussion and updates for this <a href="http://www.freewebsitetemplates.com/forum/f18/">The Bread Factory Website Template</a>. Website Template design by <a href="http://www.freewebsitetemplates.com/">Free Website Templates</a>. Please feel free to remove some or all the text and links of this page and replace it with your own About content.</p>
+<div class="about-content">
+    <h3>About Us</h3>
+    <p>We, Noa and Shiri, out of our love for baking and quality food, decided to establish our bakery in the north of Israel.</p>
+    <p>Our bakery is based on principles of quality, freshness, and cleanliness. Every pastry comes out of the oven after receiving meticulous and special attention, with the goal of providing you with a unique taste experience. We use the best ingredients and adhere to precise working processes to ensure that every pastry is perfect.</p>
+    <p>We invite you to visit us in the north, to see our pastries and enjoy the stunning landscapes. We will be happy to host you with a big smile and a fresh pastry.</p>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='images/about-image.jpg') }}" alt="About Us Image">
+    </div>
 </div>
 {% endblock %}
