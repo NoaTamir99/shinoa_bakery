@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+{% if current_user.is_authenticated and current_user.role == 'admin' %}
+    <script type="text/javascript">
+        window.location.href = "{{ url_for('orders_management') }}";
+    </script>
+{% else %}
 <div>
     <ul>
         {% for category in ['Bread', 'Sandwiches', 'Croissants'] %}
@@ -21,10 +26,12 @@
                     <td class="cart-buttons">
                         <button onclick="addToCart('{{ dish['name'] }}', {{ dish['price'] }})">+</button>
                         <button onclick="removeFromCart('{{ dish['name'] }}')">-</button>
+                        {% if current_user.is_authenticated and current_user.role == 'manager' %}
                         <form action="{{ url_for('delete_dish') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="name" value="{{ dish['name'] }}">
                             <button type="submit" class="delete-button"><i class="fa fa-trash"></i></button>
                         </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -33,4 +40,5 @@
         {% endfor %}
     </ul>
 </div>
+{% endif %}
 {% endblock %}

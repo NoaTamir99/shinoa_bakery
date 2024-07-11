@@ -1,6 +1,6 @@
-let cart = [];
-
 document.addEventListener('DOMContentLoaded', function() {
+    let cart = [];
+
     // Fetch cart from the server when the page loads
     fetch('/cart')
         .then(response => response.json())
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cartItems.style.display = cartItems.style.display === 'none' ? 'block' : 'none';
     });
 
-    function addToCart(item, price) {
+    window.addToCart = function(item, price) {
         const cartItem = cart.find(i => i.name === item);
         if (cartItem) {
             cartItem.quantity++;
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         saveCart();
     }
 
-    function removeFromCart(item) {
+    window.removeFromCart = function(item) {
         const cartItem = cart.find(i => i.name === item);
         if (cartItem) {
             cartItem.quantity--;
@@ -63,8 +63,4 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => console.log(data.message));
     }
-
-    // Export functions to be used in other scripts if needed
-    window.addToCart = addToCart;
-    window.removeFromCart = removeFromCart;
 });

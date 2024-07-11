@@ -1,43 +1,44 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}
-ביקורות
+{% block title %}Review{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/review.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="content">
-    <div>
-        <h1>השאר ביקורת</h1>
-        <form action="{{ url_for('review') }}" method="POST" enctype="multipart/form-data" class="review-form">
+    <h2>Reviews</h2>
+
+    {% if current_user.is_authenticated and current_user.role != 'manager' %}
+    <div class="review-form">
+        <form method="post" action="{{ url_for('review') }}" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="username">שם משתמש:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" required>
             </div>
-            
             <div class="form-group">
-                <label for="review">ביקורת:</label>
-                <textarea id="review" name="review" rows="4" cols="25" required></textarea>
+                <label for="review">Review:</label>
+                <textarea name="review" id="review" required></textarea>
             </div>
-            
             <div class="form-group">
-                <label for="image">העלה תמונה:</label>
-                <input type="file" id="image" name="image" accept="image/*">
+                <label for="image">Image:</label>
+                <input type="file" name="image" id="image">
             </div>
-            
-            <input type="submit" value="שלח" class="submit-button">
+            <div class="form-group">
+                <button type="submit" class="submit-button">Submit Review</button>
+            </div>
         </form>
-        
-        <h2>ביקורות קיימות</h2>
-        <ul class="reviews-list">
-            {% for review in reviews %}
-                <li class="review-item">
-                    <p><strong>{{ review.username }}</strong>: {{ review.text }}</p>
-                    {% if review.image_url %}
-                        <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" alt="תמונה" class="fixed-size">
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
     </div>
-</div>
+    {% endif %}
+
+    <ul class="reviews-list">
+        {% for review in reviews %}
+        <li class="review-item">
+            <p><strong>{{ review.username }}</strong>: {{ review.text }}</p>
+            {% if review.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" class="{% if current_user.role == 'manager' %}manager-view{% else %}fixed-size{% endif %}" alt="Review Image">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
