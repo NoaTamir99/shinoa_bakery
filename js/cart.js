@@ -50,6 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         document.getElementById('total-sum').textContent = totalSum.toFixed(2);
         document.getElementById('cart-items').style.display = cart.length > 0 ? 'block' : 'none';
+
+        const cartButton = document.getElementById('cart-button');
+        if (cartButton) {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartButton.textContent = `עגלת קניות (${totalItems})`;
+        }
     }
 
     function saveCart() {

@@ -1,11 +1,11 @@
 .checkout-form {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 600px; /* הרחבת הרוחב */
+    margin: 20px auto; /* הוספת מרווח עליון */
     padding: 20px;
-    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
+    text-align: left; /* יישור שמאלי */
 }
 
 .checkout-form h2 {
@@ -15,37 +15,44 @@
 
 .form-group {
     margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
+    display: block; /* שינוי לתצוגה של בלוק */
+    width: 100%; /* הגדרת רוחב מלא */
 }
 
 .form-group label {
-    margin-bottom: 5px;
+    display: block;
     font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left; /* יישור שמאלי */
 }
 
 .form-group input {
-    width: 100%;
+    width: calc(100% - 20px); /* התאמת רוחב האלמנטים */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 16px;
+    margin-bottom: 10px; /* מרווח תחתון */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.form-group button {
-    width: 100%;
-    padding: 12px;
+.submit-button {
     background-color: #28a745;
     color: #fff;
     border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    box-sizing: border-box;
+    display: block;
+    width: calc(100% - 20px); /* התאמת רוחב הכפתור */
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.form-group button:hover {
+.submit-button:hover {
     background-color: #218838;
 }
+

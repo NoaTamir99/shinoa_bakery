@@ -128,7 +128,7 @@ def review():
 
     return render_template('review.html', reviews=reviews)
 
-@app.route('/orders_management', endpoint='orders_management')
+@app.route('/orders_management')
 @role_required('admin')
 def orders_management():
     with get_db_connection() as con:
@@ -137,7 +137,7 @@ def orders_management():
         orders = cur.fetchall()
     return render_template('orders.html', orders=orders)
 
-@app.route('/close_order/<int:order_id>', methods=['POST'], endpoint='close_order')
+@app.route('/close_order/<int:order_id>', methods=['POST'])
 @role_required('admin')
 def close_order(order_id):
     with get_db_connection() as con:
@@ -159,7 +159,7 @@ def menu():
 def contact():
     return render_template('contact.html')
 
-@app.route('/checkout')
+@app.route('/checkout', methods=['GET'])
 @login_required
 def checkout():
     return render_template('checkout.html')
