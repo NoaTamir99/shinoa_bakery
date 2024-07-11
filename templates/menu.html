@@ -24,8 +24,10 @@
                     <td class="item-name">{{ dish['name'] }}</td>
                     <td class="price">${{ '%.2f'|format(dish['price']) }}</td>
                     <td class="cart-buttons">
+                        {% if current_user.role != 'manager' %}
                         <button onclick="addToCart('{{ dish['name'] }}', {{ dish['price'] }})">+</button>
                         <button onclick="removeFromCart('{{ dish['name'] }}')">-</button>
+                        {% endif %}
                         {% if current_user.is_authenticated and current_user.role == 'manager' %}
                         <form action="{{ url_for('delete_dish') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="name" value="{{ dish['name'] }}">

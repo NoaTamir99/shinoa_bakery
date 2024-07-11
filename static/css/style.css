@@ -528,7 +528,7 @@ body {
 }
 
 .reviews-list .review-item {
-    background-color: #f9f9f9;
+    background-color: #333333;
     border: 1px solid #ddd;
     padding: 15px;
     margin: 10px;
@@ -551,7 +551,7 @@ body {
 }
 
 .reviews-list .review-item p {
-    color: #333;
+    color: #e4d7d7;
 }
 
 
@@ -624,10 +624,20 @@ form input[type="submit"]:hover {
     text-decoration: underline;
 }
 /* about */
+/* about */
 .about-content {
     text-align: center;
-    color: #007bff;
-    text-decoration: none;
+    font-size: 20px; /* אתה יכול לשנות את המספר לגודל הרצוי */
+    line-height: 1.6; /* אופציונלי: לשיפור הקריאות */
+}
+
+.image-container {
+    margin-top: 20px; /* ריווח בין הטקסט לתמונה */
+}
+
+.image-container img {
+    width: 50%; /* שנה את הערך לפי הגודל הרצוי */
+    height: auto; /* שמירת יחס הגובה-רוחב המקורי של התמונה */
 }
 
 .content a:hover {
@@ -685,3 +695,4 @@ form input[type="submit"]:hover {
 .content a:hover {
     text-decoration: underline;
 }
+

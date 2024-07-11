@@ -38,7 +38,7 @@
             {% if review.image_url %}
                 <img src="{{ url_for('static', filename='uploads/' ~ review.image_url) }}" class="{% if current_user.role == 'manager' %}manager-view{% else %}fixed-size{% endif %}" alt="Review Image">
             {% endif %}
-        </li>a
+        </li>
         {% endfor %}
     </ul>
 {% endblock %}
